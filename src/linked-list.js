@@ -1,4 +1,4 @@
-class List {
+class LinkedList {
     constructor() {
         this.head = null;
         this.length = 0;
@@ -7,26 +7,61 @@ class List {
     insert(...objectArr) {
         objectArr = this.removeIncorrectObjectsInsert(objectArr);
 
-        if (this.head === null && objectArr.length === 1) {
-            this.head = new LinkedListNode(objectArr[0]);
-            this.length++;
-        } else if (this.head === null && objectArr.length > 1) {
-            this.head = new LinkedListNode(objectArr[0]);
-            this.length++;
-            for (let i = 1; i < objectArr.length; i++) {
-                this.traverseList(objectArr[i]);
+        if (objectArr !== []) {
+            if (this.head === null && objectArr.length === 1) {
+                this.head = new LinkedListNode(objectArr[0]);
+                this.length++;
+            } else if (this.head === null && objectArr.length > 1) {
+                this.head = new LinkedListNode(objectArr[0]);
+                this.length++;
+                for (let i = 1; i < objectArr.length; i++) {
+                    this.traverseListInsert(objectArr[i]);
+                }
+            } else if (this.head !== null && objectArr.length === 1) {
+                this.traverseListInsert(objectArr[0]);
+            } else if (this.head !== null && objectArr.length > 1) {
+                for (let i = 0; i < objectArr.length; i++) {
+                    this.traverseListInsert(objectArr[i]);
+                }
             }
-        } else if (this.head !== null && objectArr.length === 1) {
-            this.traverseList(objectArr[0]);
-        } else if (this.head !== null && objectArr.length > 1) {
-            for (let i = 0; i < objectArr.length; i++) {
-                this.traverseList(objectArr[i]);
-            }
+        } else {
+            console.log('The list is empty');
         }
     }
 
     remove(key) {
-
+        if (this.length !== 0) {
+            let previous = null;
+            let current = this.head;
+            let check = false;
+            for (let i = 0; i < this.length; i++) {
+                if (key === current.data.key) {
+                    if (previous === null) {
+                        this.head = this.head.getNext();
+                        current.setNext(null);
+                    } else if (i !== this.length - 1) {
+                        previous.setNext(current.getNext());
+                        current.setNext(null);
+                    } else if (i === this.length - 1) {
+                        previous.setNext(null);
+                    }
+                    this.length--;
+                    check = true;
+                    break;
+                } else if (previous === null) {
+                    previous = this.head;
+                    current = current.getNext();
+                } else if (previous !== null) {
+                    previous = previous.getNext();
+                    current = current.getNext();
+                }
+            }
+            if (!check) {
+                console.log(`${key} is not in this list`)
+            }
+        } else {
+            console.log('The list is empty. There is nothing to remove');
+        }
     }
 
     contains(key) {
@@ -57,17 +92,22 @@ class List {
         return keysArr.join(',');
     }
 
-    traverseList(objectArrNode) {
+    traverseListInsert(objectArrNode) {
         let previous = null;
         let current = this.head;
         for (let i = 0; i < this.length; i++) {
             if (objectArrNode.key === current.data.key) {
                 console.log('There is already a key with that value in the list');
                 break;
-            } else if (objectArrNode.key < current.data.key) {
+            } else if (objectArrNode.key < current.data.key && previous === null) {
                 this.head = new LinkedListNode(objectArrNode);
                 this.head.setNext(current);
-                current = this.head;
+                this.length++;
+                break;
+            } else if (objectArrNode.key < current.data.key && previous !== null) {
+                let newNode = new LinkedListNode(objectArrNode);
+                previous.setNext(newNode);
+                newNode.setNext(current);
                 this.length++;
                 break;
             } else if (objectArrNode.key > current.data.key && i === this.length - 1) {

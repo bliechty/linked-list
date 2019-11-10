@@ -1,7 +1,7 @@
 describe('Linked List', function() {
   let list;
   beforeEach(function() {
-    list = new List();
+    list = new LinkedList();
   });
 
   describe('Insert method', function() {
@@ -12,15 +12,16 @@ describe('Linked List', function() {
       expect(list.size()).toEqual(1);
     });
     it('sorts list as inserts', function() {
-      let object1 = { key: 'dcf' };
-      let object2 = { key: 'qwerty' };
-      let object3 = { key: 'asdf' };
-      list.insert(object1, object2, object3);
-      expect(list.contains(object1.key)).toEqual(true);
-      expect(list.contains(object2.key)).toEqual(true);
-      expect(list.contains(object3.key)).toEqual(true);
-      expect(list.size()).toEqual(3);
-      expect(list.toString()).toEqual('asdf,dcf,qwerty');
+      let object1 = { key: 'i' };
+      let object2 = { key: 'b' };
+      let object3 = { key: 'c' };
+      let object4 = { key: 'p' };
+      let object5 = { key: 'q' };
+      list.insert(object1, object2, object3, object4, object5);
+      list.remove('9');
+      list.remove('p');
+      expect(list.size()).toEqual(4);
+      expect(list.toString()).toEqual('b,c,i,q');
     });
     it('it should ignore object with empty key', function(){
       let object = {};
